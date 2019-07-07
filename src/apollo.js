@@ -1,8 +1,8 @@
 import 'isomorphic-fetch'
-import { createHttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
 import ApolloClient from 'apollo-boost'
 
-const client = new ApolloClient();
+const client = new ApolloClient({
+	uri: (process.env.PROTOCOL || "http") + "://" + (process.env.HOST || "localhost") + (":" + (process.env.PORT || 80)) + "/graphql"
+});
 
 export default client;
