@@ -32,35 +32,22 @@
 	}
 </style>
 
-<script>
-import { onMount } from "svelte";
-import apollo from "../apollo.js";
-import { gql } from 'apollo-boost';
+<script context="module">
+	import apollo from "../apollo.js";
+	import { gql } from 'apollo-boost';
 
-const SAY_HELLO = gql`
-	{
-		sayHello
-	}
-`;
-let str = "Loading...";
-
-onMount(() => {
-	const observable = apollo.watchQuery({
-		query: SAY_HELLO
-	})
-
-
-	const sub = observable.subscribe({
-		next: ({ data }) => {
-			str = data.sayHello;
+	const SAY_HELLO = gql`
+		{
+			sayHello
 		}
-	});
+	`;
+	export function preload({ params, query }) {
+		return apollo.query({ query: SAY_HELLO }).then(({ data }) => { return { str: data.sayHello } });
+	}
+</script>
 
-	return () => sub.unsubscribe();
-});
-
-
-
+<script>
+	export let str;
 </script>
 
 <svelte:head>
